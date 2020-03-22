@@ -16,23 +16,7 @@ sealed class CachePolicy {
 fun <F> Runtime<F>.getCategories(policy: CachePolicy, mcat: String?): Kind<F, List<Category>> =
     when (policy) {
         NetworkOnly -> loadCategories(mcat)
-        NetworkFirst -> loadCategories(mcat) // TODO change to conditional call
-        LocalOnly -> loadCategories(mcat) // TODO change to local only cache call
-        LocalFirst -> loadCategories(mcat) // TODO change to conditional call
+        NetworkFirst -> loadCategories(mcat)
+        LocalOnly -> loadCategories(mcat)
+        LocalFirst -> loadCategories(mcat)
     }
-
-//fun <F> Runtime<F>.getRootCategories(policy: CachePolicy, mcat: String): Kind<F, List<Category>> =
-//    when (policy) {
-//        NetworkOnly -> loadRootCategories()
-//        NetworkFirst -> loadCategories(mcat) // TODO change to conditional call
-//        LocalOnly -> loadCategories(mcat) // TODO change to local only cache call
-//        LocalFirst -> loadCategories(mcat) // TODO change to conditional call
-//    }
-
-//fun <F> Runtime<F>.getNewsItemDetailsWithCachePolicy(policy: CachePolicy, title: String): Kind<F, NewsItem> =
-//    when (policy) {
-//        NetworkOnly -> loadCategories(id)
-//        NetworkFirst -> loadCategories(id) // TODO change to conditional call
-//        LocalOnly -> loadCategories(id) // TODO change to local only cache call
-//        LocalFirst -> loadCategories(id) // TODO change to conditional call
-//    }

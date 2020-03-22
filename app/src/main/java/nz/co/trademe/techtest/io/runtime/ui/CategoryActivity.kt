@@ -10,7 +10,7 @@ import com.yelp.android.bento.components.ListComponent
 import kotlinx.android.synthetic.main.activity_category.*
 import nz.co.trademe.techtest.R
 import nz.co.trademe.techtest.io.algebras.CategoriesListView
-import nz.co.trademe.techtest.io.algebras.getCategories
+import nz.co.trademe.techtest.io.algebras.getCategoriesForView
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryPresenter
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryViewHolder
 import nz.co.trademe.techtest.io.algebras.ui.model.CategoryViewState
@@ -35,9 +35,9 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
             unsafe {
                 runNonBlocking({
                     IO.runtime(ctx = context.tmApp().runtimeContext)
-                        .getCategories(
-                            id,
-                            this@CategoryActivity
+                        .getCategoriesForView(
+                            mcat = id,
+                            view = this@CategoryActivity
                         )
                 }, {})
             }
@@ -55,7 +55,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
         unsafe {
             runNonBlocking({
                 IO.runtime(context.tmApp().runtimeContext)
-                    .getCategories(
+                    .getCategoriesForView(
                         mcat = null,
                         view = this@CategoryActivity
                     )

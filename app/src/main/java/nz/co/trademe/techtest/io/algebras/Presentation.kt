@@ -1,6 +1,7 @@
 package nz.co.trademe.techtest.io.algebras
 
 import arrow.Kind
+import nz.co.trademe.techtest.io.algebras.business.getCategories
 import nz.co.trademe.techtest.io.algebras.business.model.Category
 import nz.co.trademe.techtest.io.algebras.business.model.DomainError
 import nz.co.trademe.techtest.io.algebras.ui.model.CategoryViewState
@@ -35,9 +36,9 @@ private fun displayErrors(
     }
 }
 
-fun <F> Runtime<F>.getCategories(mcat: String?, view: CategoriesListView): Kind<F, Unit> = fx.concurrent {
+fun <F> Runtime<F>.getCategoriesForView(mcat: String?, view: CategoriesListView): Kind<F, Unit> = fx.concurrent {
     !effect { view.showLoading() }
-    val maybeCategories = !this@getAllCategories.getCategories(mcat).attempt()
+    val maybeCategories = !getCategories(mcat).attempt()
     !effect { view.hideLoading() }
     !effect {
         maybeCategories.fold(
