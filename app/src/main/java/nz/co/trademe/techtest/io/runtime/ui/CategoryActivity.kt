@@ -35,7 +35,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
             val context = this
             unsafe {
                 runNonBlocking({
-                    IO.runtime(context.tmApp().runtimeContext).getCategories(id)
+                    IO.runtime(context.tmApp().runtimeContext).getAllCategories(id, this@CategoryActivity)
                 }, {})
             }
         }
@@ -51,7 +51,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
         val context = this
         unsafe {
             runNonBlocking({
-                IO.runtime(context.tmApp().runtimeContext).getAllCategories(this@CategoryActivity)
+                IO.runtime(context.tmApp().runtimeContext).getAllCategories(null, this@CategoryActivity)
             }, {})
         }
     }
