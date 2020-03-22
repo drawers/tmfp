@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/categoryConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/categoryNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="Corn"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/categoryLeafTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toLeftOf="@+id/chevronImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Corn" />
 
-    <TextView
-        android:id="@+id/categoryLeafTextView"
+    <ImageView
+        android:id="@+id/chevronImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Right-facing chevron"
+        android:focusable="false"
+        android:src="@drawable/ic_chevron_right_black_24dp"
         android:textAlignment="textEnd"
-        tools:text="1.5 cups"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/categoryNameTextView"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

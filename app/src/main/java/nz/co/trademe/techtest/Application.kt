@@ -17,4 +17,4 @@ class TmApplication : Application() {
     }
 }
 
-fun Context.application(): TmApplication = applicationContext as TmApplication
+fun Context.tmApp(): TmApplication = applicationContext as TmApplication

@@ -9,8 +9,8 @@ import nz.co.trademe.techtest.io.algebras.data.network.mapper.toNetworkError
 import nz.co.trademe.techtest.io.runtime.context.Runtime
 import retrofit2.Response
 
-fun <F> Runtime<F>.loadCategories(): Kind<F, List<Category>> = fx.concurrent {
-    val response = !effect(context.bgDispatcher) { fetchCategories() }
+fun <F> Runtime<F>.loadCategories(mcat: String?): Kind<F, List<Category>> = fx.concurrent {
+    val response = !effect(context.bgDispatcher) { fetchCategories(mcat) }
     continueOn(context.mainDispatcher)
 
     if (response.isSuccessful) {
@@ -20,6 +20,12 @@ fun <F> Runtime<F>.loadCategories(): Kind<F, List<Category>> = fx.concurrent {
     }
 }.handleErrorWith { error -> raiseError(error.normalizeError()) }
 
-private fun <F> Runtime<F>.fetchCategories() = context.tradeMeApi.get().getCategory("0").execute()
+private fun <F> Runtime<F>.fetchCategories(mcat: String?): Response<WrapperCategory> {
+    val api = context.tradeMeApi.get()
+    return when (mcat) {
+        null -> api.getRootCategory().execute()
+        else -> api.getCategory(mcat).execute()
+    }
+}
 
 private fun Response<WrapperCategory>.subcategories() = body()!!.subcategories

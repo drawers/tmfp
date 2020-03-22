@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 /**
@@ -37,6 +38,7 @@ interface TradeMeApiService {
      */
     @GET("v1/Search/General.json")
     fun generalSearch(@QueryMap filters: Map<String, String>): Call<SearchCollection>
+
     /**
      * Retrieve general categories
      *
@@ -49,7 +51,10 @@ interface TradeMeApiService {
      * [Trade Me Api Reference]("https://developer.trademe.co.nz/api-reference/catalogue-methods/retrieve-general-categories/")
      */
     @GET("v1/Categories/{number}.json")
-    fun getCategory(@Path("number") number: String): Call<Category>
+    fun getCategory(@Path("number") number: String?, @Query("depth") depth: Int = 1): Call<Category>
+
+    @GET("v1/Categories.json")
+    fun getRootCategory(@Query("depth") depth: Int = 1): Call<Category>
 
     /**
      * Retrieve the details of a single listing

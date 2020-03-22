@@ -38,7 +38,7 @@ private fun displayErrors(
 
 fun <F> Runtime<F>.getAllCategories(view: CategoriesListView): Kind<F, Unit> = fx.concurrent {
     !effect { view.showLoading() }
-    val maybeCategories = !getCategories().attempt()
+    val maybeCategories = !getCategories(null).attempt()
     !effect { view.hideLoading() }
     !effect {
         maybeCategories.fold(
@@ -51,5 +51,5 @@ fun <F> Runtime<F>.getAllCategories(view: CategoriesListView): Kind<F, Unit> = f
 fun Category.toViewState() = CategoryViewState(
     id = id,
     name = name,
-    isLeaf = isLeaf
+    showChevron = isLeaf
 )
