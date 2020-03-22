@@ -10,7 +10,7 @@ import com.yelp.android.bento.components.ListComponent
 import kotlinx.android.synthetic.main.activity_category.*
 import nz.co.trademe.techtest.R
 import nz.co.trademe.techtest.io.algebras.CategoriesListView
-import nz.co.trademe.techtest.io.algebras.getAllCategories
+import nz.co.trademe.techtest.io.algebras.getCategories
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryPresenter
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryViewHolder
 import nz.co.trademe.techtest.io.algebras.ui.model.CategoryViewState
@@ -24,17 +24,21 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
     }
 
     private val component by lazy {
-        ListComponent(CategoryPresenter(callback), CategoryViewHolder::class.java).also {
+        ListComponent(CategoryPresenter(clickCategoryCallback), CategoryViewHolder::class.java).also {
             componentController.addComponent(it)
         }
     }
 
-    private val callback: (String) -> Unit by lazy {
+    private val clickCategoryCallback: (String) -> Unit by lazy {
         { id: String ->
             val context = this
             unsafe {
                 runNonBlocking({
-                    IO.runtime(context.tmApp().runtimeContext).getAllCategories(id, this@CategoryActivity)
+                    IO.runtime(ctx = context.tmApp().runtimeContext)
+                        .getCategories(
+                            id,
+                            this@CategoryActivity
+                        )
                 }, {})
             }
         }
@@ -50,7 +54,11 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
         val context = this
         unsafe {
             runNonBlocking({
-                IO.runtime(context.tmApp().runtimeContext).getAllCategories(null, this@CategoryActivity)
+                IO.runtime(context.tmApp().runtimeContext)
+                    .getCategories(
+                        mcat = null,
+                        view = this@CategoryActivity
+                    )
             }, {})
         }
     }

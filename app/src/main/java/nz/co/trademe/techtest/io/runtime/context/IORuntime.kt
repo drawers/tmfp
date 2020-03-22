@@ -5,4 +5,5 @@ import arrow.fx.IO
 import arrow.fx.extensions.io.concurrent.concurrent
 
 fun IO.Companion.runtime(ctx: RuntimeContext) = object : Runtime<ForIO>(
-    IO.concurrent(), ctx) {}
+    IO.concurrent(), ctx
+) {}

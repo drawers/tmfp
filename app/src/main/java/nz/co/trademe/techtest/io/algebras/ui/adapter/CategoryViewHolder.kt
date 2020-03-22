@@ -2,8 +2,6 @@ package nz.co.trademe.techtest.io.algebras.ui.adapter
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,26 +16,18 @@ class CategoryViewHolder : ComponentViewHolder<CategoryPresenter, CategoryViewSt
     private lateinit var item: ConstraintLayout
     private lateinit var name: TextView
     private lateinit var chevron: ImageView
-    private lateinit var animation: Animation
 
     override fun inflate(parent: ViewGroup): View {
-        val view = parent.inflate<ConstraintLayout>(R.layout.item_category).apply {
+        return parent.inflate<ConstraintLayout>(R.layout.item_category).apply {
             item = findViewById(R.id.categoryConstraintLayout)
             name = findViewById(R.id.categoryNameTextView)
             chevron = findViewById(R.id.chevronImageView)
         }
-        animation = AnimationUtils.makeInAnimation(view.context, false)
-        return view
     }
 
     override fun bind(presenter: CategoryPresenter, element: CategoryViewState) {
         item.setOnClickListener { presenter.callback(element.id) }
         name.text = element.name
         chevron.isGone = element.showChevron
-    }
-
-    override fun onViewRecycled() {
-        animation.cancel()
-        super.onViewRecycled()
     }
 }
