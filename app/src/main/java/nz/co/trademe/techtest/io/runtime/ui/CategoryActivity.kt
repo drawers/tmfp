@@ -10,7 +10,6 @@ import com.yelp.android.bento.components.ListComponent
 import kotlinx.android.synthetic.main.activity_category.*
 import nz.co.trademe.techtest.R
 import nz.co.trademe.techtest.io.algebras.CategoriesListView
-import nz.co.trademe.techtest.io.algebras.business.getCategories
 import nz.co.trademe.techtest.io.algebras.getAllCategories
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryPresenter
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryViewHolder
