@@ -1,6 +1,7 @@
 package nz.co.trademe.techtest.io.runtime.ui
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import arrow.fx.IO
 import arrow.fx.extensions.io.unsafeRun.runNonBlocking
@@ -11,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_category.*
 import nz.co.trademe.techtest.R
 import nz.co.trademe.techtest.io.algebras.CategoriesListView
 import nz.co.trademe.techtest.io.algebras.getCategoriesForView
+import nz.co.trademe.techtest.io.algebras.getPreviousCategory
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryPresenter
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryViewHolder
 import nz.co.trademe.techtest.io.algebras.ui.model.CategoryViewState
@@ -31,6 +33,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
 
     private val clickCategoryCallback: (String) -> Unit by lazy {
         { id: String ->
+            println("Hello!: $id")
             val context = this
             unsafe {
                 runNonBlocking({
@@ -44,9 +47,24 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
         }
     }
 
+    private val onBackPressedCallback: OnBackPressedCallback by lazy {
+        val context = this
+        object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                unsafe {
+                    runNonBlocking({
+                        IO.runtime(ctx = context.tmApp().runtimeContext)
+                            .getPreviousCategory(this@CategoryActivity)
+                    }, {})
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     override fun onStart() {
@@ -56,7 +74,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
             runNonBlocking({
                 IO.runtime(context.tmApp().runtimeContext)
                     .getCategoriesForView(
-                        mcat = null,
+                        mcat = context.tmApp().runtimeContext.state.category,
                         view = this@CategoryActivity
                     )
             }, {})
