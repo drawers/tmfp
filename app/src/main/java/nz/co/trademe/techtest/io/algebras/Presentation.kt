@@ -45,12 +45,20 @@ fun <F> Runtime<F>.previousCategoriesForView(view: CategoriesListView): Kind<F, 
 fun <F> Runtime<F>.specifiedCategoriesForView(mcat: String?, view: CategoriesListView): Kind<F, Unit> {
     return fx.concurrent {
         val maybeCategories = !categoriesForView(mcat, view)
-
-        !updateView(maybeCategories, view)
-
-        if (maybeCategories.isRight()) {
-            !updateState(mcat)
+        !effect {
+            maybeCategories.fold(
+                ifLeft = {
+                    displayErrors(view, it)
+                },
+                ifRight = {
+                    view.renderCategories(
+                        it.map { category -> category.toViewState() }
+                    )
+                    updateState(mcat)
+                }
+            )
         }
+
     }
 }
 
@@ -60,21 +68,6 @@ private fun <F> Runtime<F>.categoriesForView(mcat: String?, view: CategoriesList
         val maybeCategories = !getCategories(mcat).attempt()
         !effect { view.hideLoading() }
         maybeCategories
-    }
-}
-
-private fun <F> Runtime<F>.updateView(maybeCategories: MaybeCategories, view: CategoriesListView): Kind<F, Unit> = fx.concurrent {
-    !effect {
-        maybeCategories.fold(
-            ifLeft = {
-                displayErrors(view, it)
-            },
-            ifRight = {
-                view.renderCategories(
-                    it.map { category -> category.toViewState() }
-                )
-            }
-        )
     }
 }
 
