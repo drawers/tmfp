@@ -13,5 +13,6 @@ abstract class Runtime<F>(
 data class RuntimeContext(
     val bgDispatcher: CoroutineDispatcher,
     val mainDispatcher: CoroutineDispatcher,
-    val tradeMeApi: TradeMeApi
+    val tradeMeApi: TradeMeApi,
+    val state: State
 )
