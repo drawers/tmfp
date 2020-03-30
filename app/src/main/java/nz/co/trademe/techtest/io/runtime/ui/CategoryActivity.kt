@@ -11,8 +11,9 @@ import com.yelp.android.bento.components.ListComponent
 import kotlinx.android.synthetic.main.activity_category.*
 import nz.co.trademe.techtest.R
 import nz.co.trademe.techtest.io.algebras.CategoriesListView
-import nz.co.trademe.techtest.io.algebras.getCategoriesForView
-import nz.co.trademe.techtest.io.algebras.getPreviousCategory
+import nz.co.trademe.techtest.io.algebras.currentCategoriesForView
+import nz.co.trademe.techtest.io.algebras.previousCategoriesForView
+import nz.co.trademe.techtest.io.algebras.specifiedCategoriesForView
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryPresenter
 import nz.co.trademe.techtest.io.algebras.ui.adapter.CategoryViewHolder
 import nz.co.trademe.techtest.io.algebras.ui.model.CategoryViewState
@@ -33,12 +34,11 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
 
     private val clickCategoryCallback: (String) -> Unit by lazy {
         { id: String ->
-            println("Hello!: $id")
             val context = this
             unsafe {
                 runNonBlocking({
                     IO.runtime(ctx = context.tmApp().runtimeContext)
-                        .getCategoriesForView(
+                        .specifiedCategoriesForView(
                             mcat = id,
                             view = this@CategoryActivity
                         )
@@ -49,12 +49,12 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
 
     private val onBackPressedCallback: OnBackPressedCallback by lazy {
         val context = this
-        object: OnBackPressedCallback(true) {
+        object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 unsafe {
                     runNonBlocking({
                         IO.runtime(ctx = context.tmApp().runtimeContext)
-                            .getPreviousCategory(this@CategoryActivity)
+                            .previousCategoriesForView(this@CategoryActivity)
                     }, {})
                 }
             }
@@ -73,8 +73,7 @@ class CategoryActivity : AppCompatActivity(), CategoriesListView {
         unsafe {
             runNonBlocking({
                 IO.runtime(context.tmApp().runtimeContext)
-                    .getCategoriesForView(
-                        mcat = context.tmApp().runtimeContext.state.category,
+                    .currentCategoriesForView(
                         view = this@CategoryActivity
                     )
             }, {})
