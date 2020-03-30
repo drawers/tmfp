@@ -45,6 +45,7 @@ fun <F> Runtime<F>.previousCategoriesForView(view: CategoriesListView): Kind<F, 
 fun <F> Runtime<F>.specifiedCategoriesForView(mcat: String?, view: CategoriesListView): Kind<F, Unit> {
     return fx.concurrent {
         val maybeCategories = !categoriesForView(mcat, view)
+
         !updateView(maybeCategories, view)
 
         if (maybeCategories.isRight()) {
