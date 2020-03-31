@@ -44,7 +44,9 @@ fun <F> Runtime<F>.previousCategoriesForView(view: CategoriesListView): Kind<F, 
 
 fun <F> Runtime<F>.specifiedCategoriesForView(mcat: String?, view: CategoriesListView): Kind<F, Unit> {
     return fx.concurrent {
-        val maybeCategories = !categoriesForView(mcat, view)
+        !effect { view.showLoading() }
+        val maybeCategories = !getCategories(mcat).attempt()
+        !effect { view.hideLoading() }
         !effect {
             maybeCategories.fold(
                 ifLeft = {
@@ -59,15 +61,6 @@ fun <F> Runtime<F>.specifiedCategoriesForView(mcat: String?, view: CategoriesLis
             )
         }
 
-    }
-}
-
-private fun <F> Runtime<F>.categoriesForView(mcat: String?, view: CategoriesListView): Kind<F, MaybeCategories> {
-    return fx.concurrent {
-        !effect { view.showLoading() }
-        val maybeCategories = !getCategories(mcat).attempt()
-        !effect { view.hideLoading() }
-        maybeCategories
     }
 }
 
