@@ -54,7 +54,7 @@ fun <F> Runtime<F>.specifiedCategoriesForView(mcat: String?, view: CategoriesLis
                     view.renderCategories(
                         it.map { category -> category.toViewState() }
                     )
-                    updateState(mcat)
+                    context.state.update(mcat)
                 }
             )
         }
@@ -68,15 +68,6 @@ private fun <F> Runtime<F>.categoriesForView(mcat: String?, view: CategoriesList
         val maybeCategories = !getCategories(mcat).attempt()
         !effect { view.hideLoading() }
         maybeCategories
-    }
-}
-
-private fun <F> Runtime<F>.updateState(mcat: String?): Kind<F, Unit> {
-    val context = this.context
-    return fx.concurrent {
-        !effect {
-            context.state.update(mcat)
-        }
     }
 }
 
